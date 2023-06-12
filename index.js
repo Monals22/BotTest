@@ -15,6 +15,7 @@ const PhoneNumber = require('awesome-phonenumber')
 const { imageToWebp, videoToWebp, writeExifImg, writeExifVid } = require('./lib/exif')
 const { smsg, isUrl, generateMessageTag, getBuffer, getSizeMedia, fetchJson, await, sleep, reSize } = require('./lib/myfunc')
 
+        
 var low
 try {
   low = require('lowdb')
@@ -24,8 +25,6 @@ try {
 
 const { Low, JSONFile } = low
 const mongoDB = require('./lib/mongoDB')
-
-global.api = (name, path = '/', query = {}, apikeyqueryname) => (name in global.APIs ? global.APIs[name] : name) + path + (query || apikeyqueryname ? '?' + new URLSearchParams(Object.entries({ ...query, ...(apikeyqueryname ? { [apikeyqueryname]: global.APIKeys[name in global.APIs ? global.APIs[name] : name] } : {}) })) : '')
 
 const store = makeInMemoryStore({ logger: pino().child({ level: 'silent', stream: 'store' }) })
 
@@ -66,7 +65,7 @@ if (global.db) setInterval(async () => {
   }, 30 * 1000)
 
 async function startAdrian() {
-    const { state, saveCreds } = await useMultiFileAuthState(`./${sessionName}`)
+    const { state, saveCreds } = await useMultiFileAuthState(`./session`)
 
     const conn = connConnect({
         logger: pino({ level: 'silent' }),
@@ -128,44 +127,119 @@ async function startAdrian() {
     })
     
 	// detect group update
-		conn.ev.on("groups.update", async (json) => {
+	conn.ev.on("groups.update", async (json) => {
 			console.log(json)
 			const res = json[0];
+			    try {
+                    ppgroup = await conn.profilePictureUrl(anu.id, 'image')
+                } catch {
+                    ppgroup = 'https://tinyurl.com/yx93l6da'
+                }
 			if (res.announce == true) {
 				await sleep(2000)
+				let a = `「 Group Settings Change 」\n\nGroup has been closed by admin, Now only admin can send messages !`
 				conn.sendMessage(res.id, {
-					text: `「 Group Settings Change 」\n\nGroup telah ditutup oleh admin, Sekarang hanya admin yang dapat mengirim pesan !`,
-				});
+                    text: a, 
+                    contextInfo: {
+                        externalAdReply: {
+                            title: `${namabot}`,
+                            body: `${namaowner}`,
+                            thumbnailUrl: ppgroup,
+                            sourceUrl: "https://instagram/@dryan.pu",
+                            mediaType: 1,
+                            renderLargerThumbnail: true
+                        }
+                    }
+                }
+            );
 			} else if (res.announce == false) {
 				await sleep(2000)
+				let a = `「 Group Settings Change 」\n\nGroup has been opened by admin, Now participants can send messages !`
 				conn.sendMessage(res.id, {
-					text: `「 Group Settings Change 」\n\nGroup telah dibuka oleh admin, Sekarang peserta dapat mengirim pesan !`,
-				});
+                    text: a, 
+                    contextInfo: {
+                        externalAdReply: {
+                            title: `${namabot}`,
+                            body: `${namaowner}`,
+                            thumbnailUrl: ppgroup,
+                            sourceUrl: "https://instagram/@dryan.pu",
+                            mediaType: 1,
+                            renderLargerThumbnail: true
+                        }
+                    }
+                }
+            );
 			} else if (res.restrict == true) {
 				await sleep(2000)
+				let a = `「 Group Settings Change 」\n\nGroup info has been restricted, Now only admin can edit group info !`
 				conn.sendMessage(res.id, {
-					text: `「 Group Settings Change 」\n\nInfo group telah dibatasi, Sekarang hanya admin yang dapat mengedit info group !`,
-				});
+                    text: a, 
+                    contextInfo: {
+                        externalAdReply: {
+                            title: `${namabot}`,
+                            body: `${namaowner}`,
+                            thumbnailUrl: ppgroup,
+                            sourceUrl: "https://instagram/@dryan.pu",
+                            mediaType: 1,
+                            renderLargerThumbnail: true
+                        }
+                    }
+                }
+            );
 			} else if (res.restrict == false) {
 				await sleep(2000)
+				let anu = `「Group Settings Change 」\n\nGroup info has been opened, Now participant can edit group info !`
 				conn.sendMessage(res.id, {
-					text: `「 Group Settings Change 」\n\nInfo group telah dibuka, Sekarang peserta dapat mengedit info group !`,
-				});
+                    text: a, 
+                    contextInfo: {
+                        externalAdReply: {
+                            title: `${namabot}`,
+                            body: `${namaowner}`,
+                            thumbnailUrl: ppgroup,
+                            sourceUrl: "https://instagram/@dryan.pu",
+                            mediaType: 1,
+                            renderLargerThumbnail: true
+                        }
+                    }
+                }
+            );
 			} else if(!res.desc == ''){
 				await sleep(2000)
+				let a = `「Group Settings Change 」\n\n*Group desk has been changed to*\n\n${res.desc}`
 				conn.sendMessage(res.id, {
-					text: `「 Group Settings Change 」\n\n*Group desk telah diganti menjadi*\n\n${res.desc}`,
-				});
-      } else {
+                    text: a, 
+                    contextInfo: {
+                        externalAdReply: {
+                            title: `${namabot}`,
+                            body: `${namaowner}`,
+                            thumbnailUrl: ppgroup,
+                            sourceUrl: "https://instagram/@dryan.pu",
+                            mediaType: 1,
+                            renderLargerThumbnail: true
+                        }
+                    }
+                }
+            );
+            } else {
 				await sleep(2000)
+				let a = `「Group Settings Change 」\n\n*Group Subject has been changed to*\n\n*${res.subject}*`
 				conn.sendMessage(res.id, {
-					text: `「 Group Settings Change 」\n\n*Group Subject telah diganti menjadi*\n\n*${res.subject}*`,
-				});
-			} 
-			
-		});
-	
-    conn.ev.on('group-participants.update', async (anu) => {
+                    text: a, 
+                    contextInfo: {
+                        externalAdReply: {
+                            title: `${namabot}`,
+                            body: `${namaowner}`,
+                            thumbnailUrl: ppgroup,
+                            sourceUrl: "https://instagram/@dryan.pu",
+                            mediaType: 1,
+                            renderLargerThumbnail: true
+                        }
+                    }
+                });
+			}
+        });
+	 
+        conn.ev.on('group-participants.update', async (anu) => {
         console.log(anu)
         try {
             let metadata = await conn.groupMetadata(anu.id)
@@ -184,15 +258,58 @@ async function startAdrian() {
                 } catch {
                     ppgroup = 'https://tinyurl.com/yx93l6da'
                 }
-
                if (anu.action == 'add') {
-                    conn.sendMessage(anu.id, { image: { url: ppuser }, mentions: [num], caption: `Welcome @${num.split("@")[0]} To Group ${metadata.subject} 👋` })
+                 let a = `*Hello @${num.split("@")[0]}, Welcome To ${metadata.subject}*\n, I hope you feel comfortable in this group and don't forget to read the group description`
+                    conn.sendMessage(anu.id, {
+     text: a, 
+      contextInfo: {
+         externalAdReply: {
+         title: `${namabot}`,
+         body: `${namaowner}`,
+         thumbnailUrl: ppuser,
+         sourceUrl: "https://instagram/@dryan.pu",
+         mediaType: 1,
+         renderLargerThumbnail: true
+    }}})
                 } else if (anu.action == 'remove') {
-                    conn.sendMessage(anu.id, { image: { url: ppuser }, mentions: [num], caption: `Sayonaraa @${num.split("@")[0]} 👋` })
+                    let a = `good luck, hope you don't come back`
+      conn.sendMessage(anu.id, {
+     text: a, 
+      contextInfo: {
+         externalAdReply: {
+         title: `${namabot}`,
+         body: `${namaowner}`,
+         thumbnailUrl: ppuser,
+         sourceUrl: "https://instagram/@dryan.pu",
+         mediaType: 1,
+         renderLargerThumbnail: true
+    }}})
                 } else if (anu.action == 'promote') {
-                    conn.sendMessage(anu.id, { image: { url: ppuser }, mentions: [num], caption: `Selamat Ya @${num.split("@")[0]} Atas Kenaikan Jabatannya Di Grup ${metadata.subject} 🎉` })
+                    let a = `Congratulations @${num.split("@")[0]}, on being promoted to admin of this group ${metadata.subject} 🎉`
+                    conn.sendMessage(anu.id, {
+     text: a, 
+      contextInfo: {
+         externalAdReply: {
+         title: `${namabot}`,
+         body: `${namaowner}`,
+         thumbnailUrl: ppuser,
+         sourceUrl: "https://instagram/@dryan.pu",
+         mediaType: 1,
+         renderLargerThumbnail: true
+    }}})
                 } else if (anu.action == 'demote') {
-                    conn.sendMessage(anu.id, { image: { url: ppuser }, mentions: [num], caption: `Nice Try @${num.split("@")[0]} Atas Penurunan Jabatannya Di Grup ${metadata.subject} 😔` })
+                    let a = `nice try for the demotion to become an ordinary member`
+                    conn.sendMessage(anu.id, {
+     text: a, 
+      contextInfo: {
+         externalAdReply: {
+         title: `${namabot}`,
+         body: `${namaowner}`,
+         thumbnailUrl: ppuser,
+         sourceUrl: "https://instagram/@dryan.pu",
+         mediaType: 1,
+         renderLargerThumbnail: true
+    }}})
               }
             }
         } catch (err) {
@@ -239,7 +356,7 @@ async function startAdrian() {
 	for (let i of kon) {
 	    list.push({
 	    	displayName: await conn.getName(i + '@s.whatsapp.net'),
-	    	vcard: `BEGIN:VCARD\nVERSION:3.0\nN:${await conn.getName(i + '@s.whatsapp.net')}\nFN:${await conn.getName(i + '@s.whatsapp.net')}\nitem1.TEL;waid=${i}:${i}\nitem1.X-ABLabel:Ponsel\nitem2.EMAIL;type=INTERNET:${email}\nitem2.X-ABLabel:Email\nitem3.URL:${myweb}\nitem3.X-ABLabel:${namaweb}\nitem4.ADR:;;${region};;;;\nitem4.X-ABLabel:Region\nEND:VCARD`
+	    	vcard: `BEGIN:VCARD\nVERSION:3.0\nN:${namaowner}\nFN:${namaowner}\nitem1.TEL;waid=${i}:${i}\nitem1.X-ABLabel:Ponsel\nitem2.EMAIL;type=INTERNET:azzygota24@gmail.com\nitem2.X-ABLabel:Email\nitem3.URL:https://panel.apolozea.xyz\nitem3.X-ABLabel:Panel\nitem4.ADR:;;Indonesia;;;;\nitem4.X-ABLabel:Region\nEND:VCARD`
 	    })
 	}
 	conn.sendMessage(jid, { contacts: { displayName: `${list.length} Kontak`, contacts: list }, ...opts }, { quoted })
