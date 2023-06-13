@@ -17,13 +17,13 @@ global.apikey = '-' // LOLHUMAN
 global.rosekey = '-' // ROSE
 
 //—————「 Set Nama Bot & Own 」—————//
-global.namabot = 'ON - MAIN BOT?'
+global.namabot = 'ONMAIN'
 global.namaowner = 'RizzOnly'
 
 //—————「 Setting Owner 」—————//
 global.owner = ['6285843874148']
 global.nomerowner = '62 858-4387-4148'
-global.premium = ['6285843874148', '62858438741480']
+global.premium = ['6285843874148']
 
 //—————「 Set Wm 」—————//
 global.packname = 'STICKER ON MAIN\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n'
@@ -33,7 +33,7 @@ global.sp = '•'
 
 //—————「 Set Message 」—————//
 global.mess = {
-    success: '🤗Done',
+    success: 'Selesai 👍',
     admin: '❗Perintah Ini Hanya Bisa Digunakan Oleh Admin Group !',
     botAdmin: '❗Perintah Ini Hanya Bisa Digunakan Ketika Bot Menjadi Admin Group !',
     owner: '❗Perintah Ini Hanya Bisa Digunakan Oleh Owner !',
